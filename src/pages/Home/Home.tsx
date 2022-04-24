@@ -1,29 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import Input from '../../modules/@shared/components/Input';
 import WeatherCard from '../../modules/weather/components/WeatherCard';
 import WeatherNotFound from '../../modules/weather/components/WeatherNotFound';
-import { useMeasurementUnitDispatch } from '../../modules/weather/contexts/MeasurementUnitContext';
 import { useWeatherService } from '../../modules/weather/services/useWeatherService';
 
-type Props = {};
-
-const Home = (props: Props) => {
+const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const cityParams = searchParams.get('city') || '';
-
   const [count, setCount] = useState(cityParams);
-
-  const { data, isLoading, error, refetch } = useWeatherService({
+  const { data } = useWeatherService({
     city: cityParams,
   });
   const handleEnter = () => {
     setSearchParams({ city: count });
   };
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
 
   return (
     <div>

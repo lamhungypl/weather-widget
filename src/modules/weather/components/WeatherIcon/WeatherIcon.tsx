@@ -15,4 +15,4 @@ const WeatherIcon = ({ icon, size = '1x', ...rest }: WeatherIconProps) => {
   return <img alt="weather-icon" src={imgSrc} {...rest} />;
 };
 
-export default WeatherIcon;
+export default React.memo(WeatherIcon);

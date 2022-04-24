@@ -2,16 +2,19 @@ import clsx from 'clsx';
 import { format } from 'date-fns';
 import React from 'react';
 
+import { useMeasurementUnitValue } from '../../contexts';
 import { Daily } from '../../schemas';
-import { temperatureRounded } from '../../utils/conversions';
+import { temperatureToDescription } from '../../utils/transformWeatherData';
 import WeatherIcon from '../WeatherIcon/WeatherIcon';
 interface WeekDayItemProps {
   isActive?: boolean;
   data: Daily;
-  onClickItem: (item) => void;
+  onClickItem: (item: Daily) => void;
 }
 
 const WeekDayItem = ({ isActive, data, onClickItem }: WeekDayItemProps) => {
+  const unit = useMeasurementUnitValue();
+
   const {
     dt,
     temp: { max, min },
@@ -36,8 +39,10 @@ const WeekDayItem = ({ isActive, data, onClickItem }: WeekDayItemProps) => {
     >
       <div>{format(new Date(dt * 1000), 'EEE')}</div>
       <WeatherIcon className="my-3" icon={icon} />
-      <p className="font-bold text-[18px]">{temperatureRounded(max)}°</p>
-      <p>{temperatureRounded(min)}°</p>
+      <p className="font-bold text-[18px]">
+        {temperatureToDescription(max, unit)}°
+      </p>
+      <p>{temperatureToDescription(min, unit)}°</p>
     </div>
   );
 };

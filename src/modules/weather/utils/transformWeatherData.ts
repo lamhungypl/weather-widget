@@ -1,31 +1,38 @@
+import { mod } from '../../@shared/utils/math';
 import { WeatherWidgetData } from '../components/WeatherWidget/WeatherWidget';
-import {
-  AirPollutionData,
-  Current,
-  Daily,
-  GeocodingData,
-  WeatherOneCallData,
-} from '../schemas';
+import { MeasurementUnit } from '../contexts';
+import { AirPollutionData, Current, Daily, GeocodingData } from '../schemas';
 
-export enum DegreeDescription {
-  North = 'North',
-  East = 'East',
-  South = 'South',
-  West = 'West',
-  North_East = 'North East',
-  North_West = 'North West',
-  South_East = 'South East',
-  South_West = 'North',
-}
+import { celsiusToFahrenheit, celsiusToKelvin, mpsToMph } from './conversions';
 
 export const degreeToDescription = (degree: number) => {
-  switch (degree) {
-    default:
-      return DegreeDescription.North_East;
-  }
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const dirIndex = mod(Math.round(degree / (360 / 8)), 8);
+
+  return dirs[dirIndex];
 };
 
-export const qualityIndexToQualitativeName = (index) => {
+export const speedToDescription = (speed: number, unit: MeasurementUnit) => {
+  if (unit === MeasurementUnit.Imperial) {
+    return mpsToMph(speed);
+  }
+  return speed;
+};
+
+export const temperatureToDescription = (
+  temp: number,
+  unit: MeasurementUnit = MeasurementUnit.Metric,
+) => {
+  if (unit === MeasurementUnit.Imperial) {
+    return celsiusToFahrenheit(temp);
+  }
+  if (unit === MeasurementUnit.Standard) {
+    return celsiusToKelvin(temp);
+  }
+  return Math.round(temp);
+};
+
+export const qualityIndexToQualitativeName = (index: number) => {
   switch (index) {
     case 1: {
       return 'Good';
@@ -48,15 +55,18 @@ export const qualityIndexToQualitativeName = (index) => {
   }
 };
 
-export const transformWeatherData = ({
-  geocoding,
-  weatherData,
-  airPollution,
-}: {
-  geocoding: GeocodingData;
-  weatherData: Current | Daily;
-  airPollution: AirPollutionData;
-}): WeatherWidgetData => {
+export const transformWeatherData = (
+  {
+    geocoding,
+    weatherData,
+    airPollution,
+  }: {
+    geocoding: GeocodingData;
+    weatherData: Current | Daily;
+    airPollution: AirPollutionData;
+  },
+  unit?: MeasurementUnit,
+): WeatherWidgetData => {
   const { name, country } = geocoding;
   const { dt, weather, temp, humidity, wind_speed, wind_deg } = weatherData;
   const { list } = airPollution;

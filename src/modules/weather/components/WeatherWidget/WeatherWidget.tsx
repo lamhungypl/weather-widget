@@ -1,16 +1,17 @@
 import clsx from 'clsx';
 import { format } from 'date-fns';
-import React from 'react';
 
 import {
   MeasurementUnit,
+  SpeedUnit,
   useMeasurementUnitDispatch,
   useMeasurementUnitValue,
 } from '../../contexts';
-import { temperatureRounded } from '../../utils/conversions';
 import {
   degreeToDescription,
   qualityIndexToQualitativeName,
+  speedToDescription,
+  temperatureToDescription,
 } from '../../utils/transformWeatherData';
 import WeatherIcon from '../WeatherIcon';
 
@@ -28,9 +29,9 @@ export interface WeatherWidgetData {
 }
 interface WeatherWidgetProps {
   data: WeatherWidgetData;
-  isCurrent: boolean;
+  isToday: boolean;
 }
-const WeatherWidget = ({ data, isCurrent }: WeatherWidgetProps) => {
+const WeatherWidget = ({ data, isToday }: WeatherWidgetProps) => {
   const unit = useMeasurementUnitValue();
   const changeUnit = useMeasurementUnitDispatch();
 
@@ -69,7 +70,7 @@ const WeatherWidget = ({ data, isCurrent }: WeatherWidgetProps) => {
             </div>
             <div className="flex items-start">
               <div className="font-bold text-[44px]">
-                {temperatureRounded(temp)}°
+                {temperatureToDescription(temp, unit)}°
               </div>
               <div className="font-bold flex items-center">
                 <div
@@ -95,10 +96,17 @@ const WeatherWidget = ({ data, isCurrent }: WeatherWidgetProps) => {
         </div>
         <div className="flex-grow flex flex-col justify-end items-start">
           <div>Humidity: {humidity}%</div>
-          <div>
-            Wind: {wind_speed} M/S {degreeToDescription(wind_deg)}
+          <div className="flex items-center space-x-2">
+            <span>Wind:</span>
+            <span>{speedToDescription(wind_speed, unit)}</span>
+            <span>
+              {unit === MeasurementUnit.Imperial
+                ? SpeedUnit.MPH
+                : SpeedUnit.MPS}
+            </span>
+            <span>{degreeToDescription(wind_deg)}</span>
           </div>
-          {isCurrent && (
+          {isToday && (
             <div>Air Quality: {qualityIndexToQualitativeName(aqi)}</div>
           )}
         </div>

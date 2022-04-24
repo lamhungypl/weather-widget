@@ -1,8 +1,7 @@
 import { isSameDay } from 'date-fns';
-import { first } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useMeasurementUnitDispatch } from '../../contexts';
+import { useMeasurementUnitValue } from '../../contexts';
 import {
   WeatherOneCallData,
   AirPollutionData,
@@ -26,17 +25,21 @@ const WeatherCard = ({
   weatherCurrent,
   airPollution,
 }: WeatherCardProps) => {
+  const measureUnit = useMeasurementUnitValue();
   const { daily } = weatherCurrent;
 
   const [selectedData, setSelectedData] = useState<Current | Daily>(
     weatherCurrent.current,
   );
 
-  const data: WeatherWidgetData = transformWeatherData({
-    geocoding,
-    weatherData: selectedData,
-    airPollution,
-  });
+  const data: WeatherWidgetData = transformWeatherData(
+    {
+      geocoding,
+      weatherData: selectedData,
+      airPollution,
+    },
+    measureUnit,
+  );
 
   const checkSameDay = useMemo(() => {
     return isSameDay(
@@ -67,7 +70,7 @@ const WeatherCard = ({
 
   return (
     <div className="bg-white border border-[rgba(150_150_150_0.3)] shadow-[0px_2px_2px_rgba(0_0_0_0.25)] rounded-[4px]">
-      <WeatherWidget data={data} isCurrent={checkSameDay} />
+      <WeatherWidget data={data} isToday={checkSameDay} />
       <div className="flex items-stretch justify-between">
         {daily.map((dayItem, index) => {
           return (

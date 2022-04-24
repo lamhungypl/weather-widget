@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useState,
-} from 'react';
+import { createContext, FC, ReactNode, useContext, useState } from 'react';
 
 import { environment } from '../../../core/environment';
 
@@ -12,6 +6,11 @@ export enum MeasurementUnit {
   Standard = 'Standard', // Kelvin and meter/sec
   Metric = 'Metric', // Celsius and meter/sec
   Imperial = 'Imperial', // Fahrenheit and miles/hour
+}
+
+export enum SpeedUnit {
+  MPS = 'Meter/Sec',
+  MPH = 'Miles/Hour',
 }
 
 export type MeasurementUnitDispatch = (value: MeasurementUnit) => void;
@@ -28,6 +27,7 @@ interface Props {
 }
 
 export const MeasurementUnitProvider: FC<Props> = ({ children }) => {
+  //NOTE: getWeatherOneCall can set unit params
   const [unit, setUnit] = useState<MeasurementUnit>(MeasurementUnit.Metric);
   return (
     <MeasurementUnitValueContext.Provider value={unit}>
