@@ -102,7 +102,7 @@ const WeatherWidget = ({ data, isToday }: WeatherWidgetProps) => {
             <span>
               {unit === MeasurementUnit.Imperial
                 ? SpeedUnit.MPH
-                : SpeedUnit.MPS}
+                : SpeedUnit.KPH}
             </span>
             <span>{degreeToDescription(wind_deg)}</span>
           </div>

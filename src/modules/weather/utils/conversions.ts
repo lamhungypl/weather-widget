@@ -25,6 +25,10 @@ export const mpsToMph = (n: number) => {
   const ratio = 3.6 / 1.60934;
   return (n * ratio).toFixed(2);
 };
+export const mpsToKph = (n: number) => {
+  const ratio = 3.6;
+  return (n * ratio).toFixed(2);
+};
 
 export const mphToMps = (n: number) => {
   const ratio = 3.6 / 1.60934;
