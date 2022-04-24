@@ -9,8 +9,9 @@ export enum MeasurementUnit {
 }
 
 export enum SpeedUnit {
-  MPS = 'Meter/Sec',
-  MPH = 'Miles/Hour',
+  MPS = 'MPS',
+  MPH = 'MPH',
+  KPH = 'KPH',
 }
 
 export type MeasurementUnitDispatch = (value: MeasurementUnit) => void;

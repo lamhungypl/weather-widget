@@ -3,7 +3,12 @@ import { WeatherWidgetData } from '../components/WeatherWidget/WeatherWidget';
 import { MeasurementUnit } from '../contexts';
 import { AirPollutionData, Current, Daily, GeocodingData } from '../schemas';
 
-import { celsiusToFahrenheit, celsiusToKelvin, mpsToMph } from './conversions';
+import {
+  celsiusToFahrenheit,
+  celsiusToKelvin,
+  mpsToKph,
+  mpsToMph,
+} from './conversions';
 
 export const degreeToDescription = (degree: number) => {
   const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
@@ -16,7 +21,7 @@ export const speedToDescription = (speed: number, unit: MeasurementUnit) => {
   if (unit === MeasurementUnit.Imperial) {
     return mpsToMph(speed);
   }
-  return speed;
+  return mpsToKph(speed);
 };
 
 export const temperatureToDescription = (
