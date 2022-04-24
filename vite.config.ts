@@ -9,4 +9,5 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react(), svgr()],
   server: { port: 3333, cors: false },
+  base: './',
 });
